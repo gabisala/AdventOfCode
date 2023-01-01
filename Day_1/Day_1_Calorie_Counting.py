@@ -83,3 +83,5 @@ def sum_top_3_most_calories(elfs_food):
 
 sum_of_top_3_calories = sum_top_3_most_calories(elfs_food)
 print(sum_of_top_3_calories)
+
+print("The end")
