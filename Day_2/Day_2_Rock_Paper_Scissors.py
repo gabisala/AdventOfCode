@@ -46,10 +46,6 @@ games = [line.strip().split() for line in lines]
 
 
 # Define rules
-rules = {"Rock": [("Rock" and "Scissors"), ("Scissors" and "Rock")],
-         "Scissors": [("Scissors" and "Paper"), ("Paper" and "Scissors")],
-         "Paper": [("Paper" and "Rock"), ("Rock" and "Paper")]}
-
 value = {"Rock": 1, "Paper": 2, "Scissors": 3}
 
 hand_sign = {"A": "Rock", "X": "Rock", 
