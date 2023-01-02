@@ -44,15 +44,13 @@ with open('Day_2/input.txt', 'r') as file:
 
 games = [line.strip().split() for line in lines]
 
-
+# First puzzle
 # Define rules
 value = {"Rock": 1, "Paper": 2, "Scissors": 3}
 
 hand_sign = {"A": "Rock", "X": "Rock", 
            "B": "Paper", "Y": "Paper", 
            "C": "Scissors", "Z": "Scissors"}
-
-
 
 opponent_score = 0
 my_score = 0
@@ -63,6 +61,70 @@ for game in games:
     my_play = game[1]
     opponent_hand_sign = hand_sign[opponent_play]
     my_hand_sign = hand_sign[my_play]
+    
+    print(f'Oponent: {opponent_hand_sign} - Me: {my_hand_sign}')
+
+    if my_hand_sign == opponent_hand_sign:
+        print('Draw')
+        my_score += (3 + value[my_hand_sign])
+        opponent_score += (3 + value[opponent_hand_sign])
+    
+    elif my_hand_sign == "Rock" and opponent_hand_sign == "Scissors" or opponent_hand_sign == "Scissors" and my_hand_sign == "Rock":
+        print('I win')
+        my_score += (6 + value[my_hand_sign])
+        opponent_score += (0 + value[opponent_hand_sign])
+        
+    elif my_hand_sign == "Scissors" and opponent_hand_sign == "Paper" or opponent_hand_sign == "Paper" and my_hand_sign == "Scissors":
+        print('I win')
+        my_score += (6 + value[my_hand_sign])
+        opponent_score += (0 + value[opponent_hand_sign])
+    
+    elif my_hand_sign == "Paper" and opponent_hand_sign == "Rock" or opponent_hand_sign == "Rock" and my_hand_sign == "Paper":
+        print('I win')
+        my_score += (6 + value[my_hand_sign])
+        opponent_score += (0 + value[opponent_hand_sign])
+        
+    else:
+        my_score += (0 + value[my_hand_sign])
+        opponent_score += (6 + value[opponent_hand_sign])
+        
+        
+print(f'My score: {my_score}, Opponent score: {opponent_score}')
+
+
+# Second puzzle
+# Define rules
+value = {"Rock": 1, "Paper": 2, "Scissors": 3}
+hand_sign = {"A": "Rock", "B": "Paper", "C": "Scissors", "Z": "Scissors"}
+strategy = {"X": "Lose", "Y": "Draw", "Z": "Win"}
+
+opponent_score = 0
+my_score = 0
+
+    
+for game in games:
+    opponent_play = game[0]
+    my_strategy= strategy[game[1]]
+    opponent_hand_sign = hand_sign[opponent_play]
+    
+    if my_strategy == "Draw":
+        my_hand_sign = opponent_hand_sign
+        
+    elif my_strategy == "Win":
+        if opponent_hand_sign == "Rock":
+            my_hand_sign = "Paper"
+        elif opponent_hand_sign == "Paper":
+            my_hand_sign = "Scissors"
+        elif opponent_hand_sign == "Scissors":
+            my_hand_sign = "Rock"
+            
+    elif my_strategy == "Lose":
+        if opponent_hand_sign == "Rock":
+            my_hand_sign = "Scissors"
+        elif opponent_hand_sign == "Paper":
+            my_hand_sign = "Rock"
+        elif opponent_hand_sign == "Scissors":
+            my_hand_sign = "Paper"
     
     print(f'Oponent: {opponent_hand_sign} - Me: {my_hand_sign}')
 
