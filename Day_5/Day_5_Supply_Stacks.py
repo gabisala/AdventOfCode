@@ -170,32 +170,42 @@ from collections import deque
 import copy
 
 def simulate_in_console(puzzle_state):
+    """
+    This is a helper function. it prints the visual represetation for puzzle states
+    The origina states, before the crates are moved from one stack to another stack
+    The first puzzle, final state
+    The second puzzle, final state
+    """
     
     print("")
+    
+    # Add padding using the filler pattern
     width = 100
     filler = '.'
     
+    # Original state
     if puzzle_state == 'original':
         
         print(f'{"  Original state":{filler}>{width}}\n')
         stacks = crates_stacks
 
-            
+    # After the first puzzle  
     elif puzzle_state == 'first':
         
         print(f'{"  First puzzle":{filler}>{width}}\n')    
         stacks = crates_stacks_first_puzzle
 
-        
+    # After the second puzzle 
     elif puzzle_state == 'second':
         
         print(f'{"  Second puzzle":{filler}>{width}}\n')
         stacks = crates_stacks_second_puzzle
 
-        
+    # Show all staks  
     for dq in stacks:
             print(dq)
             
+    # Show top crates
     top_of_each_stack = []
     for dq in stacks:
         top_of_each_stack.append(dq.pop())
