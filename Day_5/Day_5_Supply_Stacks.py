@@ -134,7 +134,7 @@ def simulate_in_console(puzzle_state,stacks):
     
 
 # Read the input file and store the lines in a list
-with open('AdventOfCode/Day_5/input.txt', 'r') as file:
+with open('AdventOfCode_2022/Day_5/input.txt', 'r') as file:
     lines = file.readlines()
     
 # Strip the newline characters from the lines

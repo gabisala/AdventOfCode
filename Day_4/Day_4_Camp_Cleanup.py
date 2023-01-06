@@ -63,7 +63,7 @@ In how many assignment pairs do the ranges overlap?
 
 ## First puzzle
 # Open the input file and read in the lines
-with open('AdventOfCode/Day_4/input.txt', 'r') as file:
+with open('AdventOfCode_2022/Day_4/input.txt', 'r') as file:
     lines = file.readlines()
 
 # Create a list of intervals from the input lines

@@ -55,7 +55,7 @@ To begin, get your puzzle input.
 """
 
 # Open the input file and read in the first line
-with open('AdventOfCode/Day_6/input.txt', 'r') as file:
+with open('AdventOfCode_2022/Day_6/input.txt', 'r') as file:
     lines = file.readlines()
     
 signal = lines[0]
