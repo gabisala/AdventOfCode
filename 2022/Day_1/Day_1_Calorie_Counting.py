@@ -55,7 +55,7 @@ Find the top three Elves carrying the most Calories. How many Calories are those
 """
 
 # Process input data
-with open('AdventOfCode_2022/Day_1/input.txt', 'r') as file:
+with open('AdventOfCode/2022/Day_1/input.txt', 'r') as file:
     lines = file.readlines()
 
 elfs_food = []

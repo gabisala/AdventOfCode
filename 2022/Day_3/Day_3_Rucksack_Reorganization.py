@@ -79,7 +79,7 @@ Find the item type that corresponds to the badges of each three-Elf group. What 
 import string
 
 # Read in lines from file and strip newline characters
-with open('AdventOfCode_2022/Day_3/input.txt', 'r') as file:
+with open('AdventOfCode/2022/Day_3/input.txt', 'r') as file:
     lines = file.readlines()
 rucksacks = [rucksack.strip('\n') for rucksack in lines]
 

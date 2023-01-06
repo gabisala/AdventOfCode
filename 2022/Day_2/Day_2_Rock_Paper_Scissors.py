@@ -39,7 +39,7 @@ What would your total score be if everything goes exactly according to your stra
 """
 
 # Process input data
-with open('AdventOfCode_2022/Day_2/input.txt', 'r') as file:
+with open('AdventOfCode/2022/Day_2/input.txt', 'r') as file:
     lines = file.readlines()
 
 games = [line.strip().split() for line in lines]
