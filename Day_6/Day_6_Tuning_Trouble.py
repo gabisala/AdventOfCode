@@ -51,7 +51,22 @@ nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg: first marker after character 10
 zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw: first marker after character 11
 How many characters need to be processed before the first start-of-packet marker is detected?
 
-To begin, get your puzzle input.
+--- Part Two ---
+Your device's communication system is correctly detecting packets, but still isn't working. 
+It looks like it also needs to look for messages.
+
+A start-of-message marker is just like a start-of-packet marker, except it consists 
+of 14 distinct characters rather than 4.
+
+Here are the first positions of start-of-message markers for all of the above examples:
+
+mjqjpqmgbljsphdztnvjfqwrcgsmlb: first marker after character 19
+bvwbjplbgvbhsrlpgdmjqwftvncz: first marker after character 23
+nppdvjthqldpwncqszvftbrmjlhg: first marker after character 23
+nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg: first marker after character 29
+zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw: first marker after character 26
+How many characters need to be processed before the first start-of-message marker is detected?
+
 """
 
 # Open the input file and read in the first line
@@ -99,3 +114,51 @@ def find_packet_marker(datastream):
 start_of_packet_marker = find_packet_marker(signal)
 # Print the index of the marker
 print(start_of_packet_marker)
+
+
+def find_message_marker(datastream):
+    """
+    Find the index of the first occurrence of a fourteen-character sequence in which all characters are different.
+    If no such sequence is found, return -1.
+    """
+    # Initialize a list to store the characters that have been seen
+    seen = []
+    # Initialize a variable to store the index of the marker
+    index_marker = 0
+    
+    # Iterate over the characters in the datastream
+    for letter in datastream:
+        # Check if the current character has been seen before
+        if letter in seen:
+            # If the character has been seen before, find the index of the first occurrence
+            index_first_duplicate = seen.index(letter)
+            # Update the seen list to exclude the duplicate character
+            seen = seen[index_first_duplicate + 1:]
+            # Increment the index of the marker
+            index_marker += 1
+            # Add the current character to the seen list
+            seen.append(letter)
+        else:
+            # If the character has not been seen before, add it to the seen list
+            seen.append(letter)
+            # Increment the index of the marker
+            index_marker += 1
+            # Check if the seen list contains four different characters
+            if len(seen) == 14:
+                # Return the index of the marker
+                return index_marker
+    
+    # If no marker is found, return -1
+    return -1
+
+## First puzzle
+# Find the start of packet marker in the signal
+start_of_packet_marker = find_packet_marker(signal)
+# Print the index of the marker
+print(start_of_packet_marker)
+
+## Second puzzle
+# Find the start of message marker in the signal
+start_of_message_marker = find_message_marker(signal)
+# Print the index of the marker
+print(start_of_message_marker)
