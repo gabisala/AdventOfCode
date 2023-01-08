@@ -108,14 +108,16 @@ Find all of the directories with a total size of at most 100000. What is
 the sum of the total sizes of those directories?
 
 """
-# from collections import defaultdict
+from collections import deque
 
 with open('AdventOfCode/2022/Day_7/input.txt', 'r') as file:
     lines = file.readlines()
     
 raw_data = [line.strip("\n") for line in lines]
 folders = []
-current_folder = None
+current_path = deque()
+current_dir = None
+file_system = {}
 
 for line in raw_data:
     if line.startswith("$"):
@@ -125,56 +127,144 @@ for line in raw_data:
         if len(parse_line) == 2:
             prompt, command = parse_line
             
+            if command == 'ls':
+                current_dir = current_path[-1]
+                file_system[current_dir] = {'Sub_directories': [], 'Files': [], 'Files_Size': 0, 'Total_Size': 0}
+              
+            
         elif len(parse_line) == 3:
             prompt, command, folder = parse_line
             
             if command == 'cd':
             
                 if folder == '..':
-                    get_parent_folder(folder)
+                    current_path.pop()
+                    # print(current_path)
                     
                 else:
-                    currrent_folder = folder
+                    current_path.append(folder)
+                    # print(current_path)
+                    
+    else:
+        parse_line = line.split(" ")
+        if parse_line[0] == 'dir':
+            file_system[current_dir]['Sub_directories'].append(parse_line[1])
+        else:
+            try:
+                file_size = int(parse_line[0])
+                file_name = parse_line[1]
+                file_system[current_dir]['Files'].append((file_name, file_size))
+                file_system[current_dir]['Files_Size'] += file_size
+                
+            except:
+              print("not a file size")
+
+# # partial_folders_and_size = {}         
+# for key, value in file_system.items():
+#   # print(f"Folder: {key} - {value}")
+#   # if value['Files_Size'] == 0:
+#   #   print(f"Folder: {key} - {value}")
+#     # print(key, value)
+#   if value['Sub_directories'] == []:
+#     # print(key, value['Size'])
+#     file_system[key]['Total_Size'] = file_system[key]['Files_Size']
+#     # print(f"Folder: {key} - {value}")
+  
+#   else:
+#     for subdir in value['Sub_directories']:
+#       try:
+#         # file_system[subdir]['Total_Size']
+#         print(file_system[subdir])
+#       except KeyError:
+#         print(subdir, '------------------')
+        
+#     # else:
+#       # print(key, '-------------------') 
+              
+def get_dir_size(dir_name, file_system):
+    
+    if file_system[dir_name]['Sub_directories'] == []:
+        # print(f"file size {file_system[dir_name]['Files_Size']}")
+        return file_system[dir_name]['Files_Size']
+    
+    else:
+        total_size = 0
+        
+        for sub_dir in file_system[dir_name]['Sub_directories']:
+            # print(sub_dir)
+            
+            # partial_size = get_dir_size(sub_dir, file_system)
+            # print(f"partial size {partial_size}")
+            total_size += get_dir_size(sub_dir, file_system)
+        
+        total_size += file_system[dir_name]['Files_Size']   
+        return total_size
+        
                 
             
-            
-        prompt, command, folder = line.split(' ')
-        print(prompt, command, folder)
-        
+			
 
-# # print(raw_data)
+for dir_name in file_system.keys():
+    
 
-# folders = defaultdict()
-# current_dir = None
-# previous_dir = None
+    
+    if file_system[dir_name]['Total_Size'] == 0:
+        print(file_system[dir_name])
+        file_system[dir_name]['Total_Size'] = get_dir_size(dir_name, file_system)
+        print(file_system[dir_name])
+    else:
+        print('--------------Already processed')
+        
+    #     get_dir_size(dir_name, file_system)
+    # else:
+    #     print(file_system[dir_name])
+  
+# for key, value in file_system.items():
+#     print(key, value)
 
-# for line in raw_data:
-#     # print(line)
-#     if line.startswith("$"):
+# solution = 0
+
+
+
+# folders_and_size = {}
+
+# for key, value in file_system.items():
+#     print(f"Input {key}, {value}")
+#     if value['Sub_directories'] == []:
+#       print(key, value['Size'])
+#       folders_and_size[key] = value['Size']
+      
+#     else:
+#       partial_size = 0
+      
+#       for sub_folder in value['Sub_directories']:
         
-#         if line.startswith("$ cd"):
-#             pass
-        
-#             if line.endswith(".."):
-#                 current_dir = previous_dir
+#           print(value['Sub_directories'], '---')
+#           print(f"From file stystem {sub_folder}: {file_system[sub_folder]['Size']}")
+#           try:
+#               partial_size += partial_folders_and_size[sub_folder]
+#               print(partial_folders_and_size[sub_folder])
+#           except KeyError:
+#               partial_size += file_system[sub_folder]['Size']
+#               print(f"From file stystem {file_system[sub_folder]['Size']}")
+#               print(f'key error: {sub_folder}')
             
-#             elif line.endswith("/"):
-#                 current_dir = "/"
-                
-#             else:
-#                 current_dir = line.split(" ")[-1]
-                
+#           # partial_size += partial_folders_and_size[sub_folder]
+          
+          
+#       folders_and_size[key] = partial_size + value['Size']
+
+target_directories_sum = 0
+for key, value in file_system.items():
+    
+    print(key, value)
+    if file_system[key]['Total_Size'] <= 100000:
         
-#         elif line.startswith("$ ls"):
-            
-        
-#             prompt, command, folder = line.split(' ')
-#             print(prompt, command, folder)
-        
-#         if folder != '..':
-#             folders.append(folder)
-        
-#         # print(line)
-        
-# for f in folders:
-#     print(f)
+        print(f"Smaller {key}, {file_system[key]['Total_Size']}")
+        target_directories_sum += file_system[key]['Total_Size']
+     
+    else:
+        print(f"bigger {key}, {file_system[key]['Total_Size']}")
+         
+
+print(f"Solution {target_directories_sum}")
