@@ -121,9 +121,9 @@ raw_data = [line.strip("\n") for line in lines]
 folders = []
 current_path = deque()
 current_dir = None
-file_system = {}
+file_system = OrderedDict()
 paths_subdirs = []
-sub_dir_size = defaultdict()
+sub_dir_size = defaultdict(lambda: 0)
 
 
 for line in raw_data:
@@ -149,7 +149,7 @@ for line in raw_data:
             print(f'{current_dir} aleready in.')
         else:
             print(f'Added {current_dir}')
-            file_system[current_dir] = {'Sub_directories': [], 'Files': [], 'Files_Size': 0, 'Total_Size': 0}
+            file_system[current_dir] = {'Sub_directories': [], 'Files': [], 'Files_Size': 0, 'Sub_dirs_Size': 0, 'Total_Size': 0}
         # file_system[current_dir] = {'Sub_directories': [], 'Files': [], 'Files_Size': 0, 'Sub_dirs_Size':0, 'Total_Size': 0}
 
     else:
@@ -162,11 +162,11 @@ for line in raw_data:
             file_name = parse_line[1]
             file_system[current_dir]['Files'].append((file_name, file_size))
             file_system[current_dir]['Files_Size'] += file_size
-            try:
-                sub_dir_size[current_dir] += int(file_size)
-            except KeyError:
-                sub_dir_size[current_dir] = 0
-                sub_dir_size[current_dir] += int(file_size)
+            
+print(len(file_system.keys()))           
+for key, value in file_system.items():
+    print(key, value)
+
 
 for key, value in file_system.items():
     print(key)
@@ -175,11 +175,83 @@ for key, value in file_system.items():
     
     for file in file_system[key]['Files']:
         print(f'    - {file[0]} - {file[1]}')
+
+
+sub_dir_size = defaultdict(int) 
+       
+def calculate_directories_size(key, file_system, sub_dir_size):
+     
+    if file_system[key]['Sub_directories'] == []:
+        # print(key, value)
+        
+        file_system[key]['Total_Size'] = file_system[key]['Files_Size']
+        sub_dir_size[key] = file_system[key]['Total_Size']
+        return sub_dir_size[key]
     
+    else:
+        # print(key, value)
+        sub_dirs_size = 0
+        for sub_dir in file_system[key]['Sub_directories']:
+            
+            if sub_dir in sub_dir_size.keys():
+                print(f'Found {sub_dir}: {sub_dir_size[sub_dir]}')
+                sub_dirs_size += sub_dir_size[sub_dir]
                 
-for key in reversed(file_system.keys()):
-    print(key)
+            else:
+                sub_dir_size += calculate_directories_size(key, file_system, sub_dir_size)
+        
+        file_system[key]['Sub_dirs_Size'] = sub_dirs_size
+        file_system[key]['Total_Size'] = file_system[key]['Files_Size'] + file_system[key]['Sub_dirs_Size']
+        sub_dir_size[key] = file_system[key]['Total_Size']
+        
+        return sub_dir_size[key]
+                
+
+for key, value in reversed(file_system.items()):
+    calculate_directories_size(key, file_system, sub_dir_size)   
+# for key, value in sub_dir_size.items():
+#     print(key, value)
+
+        
+        
+        
+# sub_dir_size = defaultdict(int) 
+         
+# for key, value in reversed(file_system.items()):
+#     print(key)
     
+#     if file_system[key]['Sub_directories'] == []:
+        
+#         if key not in sub_dir_size.keys():
+#             files_size = file_system[key]['Files_Size']
+#             print(key, files_size)
+
+#             file_system[key]['Total_Size'] += files_size
+
+#             sub_dir_size[key] += files_size
+
+#     else:
+#         print(file_system[key]['Sub_directories'])
+#         for sub_dir in file_system[key]['Sub_directories']:
+#             print(sub_dir)
+#             if sub_dir in sub_dir_size.keys():
+#                 print(f'Found                     {sub_dir}, {sub_dir_size[sub_dir]}')
+#                 file_system[key]['Sub_dirs_Size'] += sub_dir_size[sub_dir]
+                
+#             else:
+#                 print("I don't know this key")
+                
+#         file_system[key]['Total_Size'] += file_system[key]['Sub_dirs_Size'] + file_system[key]['Files_Size']
+                
+                
+# print(sub_dir_size.keys())            
+
+# for key in file_system.keys():
+#     if key not in sub_dir_size.keys():
+#         print(f'{key} not in sizes')
+
+# for key, value in sub_dir_size.items():
+#     print(key, value)
 
 
 # target_directories_sum = 0
