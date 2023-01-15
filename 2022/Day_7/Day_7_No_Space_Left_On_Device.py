@@ -145,10 +145,17 @@ for line in raw_data:
 
         current_dir = current_path[-1]
         
-        if current_dir in file_system.keys():
-            print(f'{current_dir} aleready in.')
+        if current_dir in file_system:
+            pass
+            # print(f'{current_dir} aleready in.')
+
+# for key, value in reversed(file_system.items()):
+#     calculate_directories_size(key, sub_dir_size, file_system)   
+# # for key, value in sub_dir_size.items():
+# #     print(key, value)
+
         else:
-            print(f'Added {current_dir}')
+            # print(f'Added {current_dir}')
             file_system[current_dir] = {'Sub_directories': [], 'Files': [], 'Files_Size': 0, 'Sub_dirs_Size': 0, 'Total_Size': 0}
         # file_system[current_dir] = {'Sub_directories': [], 'Files': [], 'Files_Size': 0, 'Sub_dirs_Size':0, 'Total_Size': 0}
 
@@ -157,15 +164,15 @@ for line in raw_data:
         if parse_line[0] == 'dir':
             file_system[current_dir]['Sub_directories'].append(parse_line[1])
         else:
-
             file_size = int(parse_line[0])
             file_name = parse_line[1]
             file_system[current_dir]['Files'].append((file_name, file_size))
             file_system[current_dir]['Files_Size'] += file_size
-            
-print(len(file_system.keys()))           
-for key, value in file_system.items():
-    print(key, value)
+
+         
+# print(len(file_system.keys()))           
+# for key, value in file_system.items():
+#     print(key, value)
 
 
 for key, value in file_system.items():
@@ -178,42 +185,53 @@ for key, value in file_system.items():
 
 
 sub_dir_size = defaultdict(int) 
+for key, value in file_system.items():
+
+    
+    if file_system[key]['Sub_directories'] == []:
+
+    - qsgvbj - 257337
        
-def calculate_directories_size(key, file_system, sub_dir_size):
+def calculate_directories_size(key, sub_dir_size, file_system):
      
     if file_system[key]['Sub_directories'] == []:
         # print(key, value)
         
         file_system[key]['Total_Size'] = file_system[key]['Files_Size']
         sub_dir_size[key] = file_system[key]['Total_Size']
-        return sub_dir_size[key]
+        print(sub_dir_size, '-----------------')
+        return file_system[key]['Files_Size']
     
     else:
         # print(key, value)
-        sub_dirs_size = 0
+        current_dir_size = 0
         for sub_dir in file_system[key]['Sub_directories']:
             
-            if sub_dir in sub_dir_size.keys():
+
+                
+            if sub_dir in sub_dir_size:
                 print(f'Found {sub_dir}: {sub_dir_size[sub_dir]}')
-                sub_dirs_size += sub_dir_size[sub_dir]
+                current_dir_size += sub_dir_size[sub_dir]
+
                 
             else:
-                sub_dir_size += calculate_directories_size(key, file_system, sub_dir_size)
+                current_dir_size += calculate_directories_size(sub_dir, sub_dir_size, file_system)
         
-        file_system[key]['Sub_dirs_Size'] = sub_dirs_size
+        file_system[key]['Sub_dirs_Size'] = current_dir_size
         file_system[key]['Total_Size'] = file_system[key]['Files_Size'] + file_system[key]['Sub_dirs_Size']
-        sub_dir_size[key] = file_system[key]['Total_Size']
+        sub_dir_size[key] = current_dir_size
         
-        return sub_dir_size[key]
+        return current_dir_size
+    - qsgvbj - 257337
                 
 
-for key, value in reversed(file_system.items()):
-    calculate_directories_size(key, file_system, sub_dir_size)   
-# for key, value in sub_dir_size.items():
-#     print(key, value)
+# for key in file_system:
+#     calculate_directories_size(key, sub_dir_size, file_system) 
 
-        
-        
+
+
+      
+ 
         
 # sub_dir_size = defaultdict(int) 
          
@@ -255,17 +273,27 @@ for key, value in reversed(file_system.items()):
 
 
 # target_directories_sum = 0
-# for key, value in sub_dir_size.items():
-    
-#     print(key, value)
-#     if sub_dir_size[key] <= 100000:
+# for key, value in file_system.items():
+#     # print(key, value)
+#     if file_system[key]['Total_Size'] <= 100_000:
+#         target_directories_sum += file_system[key]['Total_Size']
+#         print(key, value)
         
-#         print(f"Smaller {key}, {sub_dir_size[key]}")
-#         target_directories_sum += sub_dir_size[key]
+
+# print(f'Solution: {target_directories_sum}')
+    
+
+for key, value in sub_dir_size.items():
+    
+    print(key, value)
+    if sub_dir_size[key] <= 100000:
+        
+        print(f"Smaller {key}, {sub_dir_size[key]}")
+        target_directories_sum += sub_dir_size[key]
      
-#     else:
-#         print(f"bigger {key}, {sub_dir_size[key]}")
+    else:
+        print(f"bigger {key}, {sub_dir_size[key]}")
          
 
-# print(f"Solution {target_directories_sum}")
+print(f"Solution {target_directories_sum}")
 
